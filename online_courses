@@ -1,0 +1,46 @@
+-- Таблица пользователей
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Таблица курсов
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_by INT,
+    FOREIGN KEY (created_by) REFERENCES users(id)
+);
+
+-- Таблица видео
+CREATE TABLE videos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_id INT,
+    video_title VARCHAR(100),
+    video_url VARCHAR(255),
+    FOREIGN KEY (course_id) REFERENCES courses(id)
+);
+
+-- Таблица домашних заданий
+CREATE TABLE homework (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_id INT,
+    homework_description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (course_id) REFERENCES courses(id)
+);
+
+-- Таблица отправок домашних заданий
+CREATE TABLE submissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    homework_id INT,
+    submission_content TEXT,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (homework_id) REFERENCES homework(id)
+);
